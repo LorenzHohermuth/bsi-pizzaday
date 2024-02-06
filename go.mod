@@ -1,4 +1,4 @@
-module github.com/lorenz/pizzaday
+module github.com/lorenzhohermuth/bsi-pizzaday
 
 go 1.21.4
 

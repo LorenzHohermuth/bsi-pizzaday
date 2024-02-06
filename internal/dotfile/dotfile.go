@@ -10,6 +10,8 @@ var opt Options
 type Options struct {
 	VegiPizzas	[]string
 	MeatPizzas	[]string
+	PizzaTypes	[]string
+	Slots				[]string
 	Location		string
 }
 
@@ -24,7 +26,7 @@ func ParseFile(dotfilePath string) Options {
 }
 
 func setValue(line string) {
-	if line == "" {
+	if strings.TrimSpace(line) == "" {
 		return
 	} 
 	lineSplit := strings.Split(line, "=")
@@ -42,6 +44,7 @@ func readValue(key string, value string){
 			arr[i] = strings.TrimSpace(arr[i])	
 		}
 		opt.VegiPizzas = arr
+
 	case "pizza.meat":
 		value = strings.Trim(value, "[]")
 		arr := strings.Split(value, ",")
@@ -49,6 +52,24 @@ func readValue(key string, value string){
 			arr[i] = strings.TrimSpace(arr[i])	
 		}
 		opt.MeatPizzas = arr
+
+	case "available.slots":
+		value = strings.Trim(value, "[]")
+		arr := strings.Split(value, ",")
+		for i := range arr {
+			arr[i] = strings.TrimSpace(arr[i])	
+		}
+		opt.Slots = arr
+
+	opt.MeatPizzas = arr
+		case "available.pizzaTypes":
+		value = strings.Trim(value, "[]")
+		arr := strings.Split(value, ",")
+		for i := range arr {
+			arr[i] = strings.TrimSpace(arr[i])	
+		}
+		opt.PizzaTypes = arr
+
 	case "bsi.location":
 		opt.Location = value
 	}

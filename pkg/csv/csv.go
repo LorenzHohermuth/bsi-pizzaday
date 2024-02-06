@@ -32,26 +32,10 @@ func Decode(pathToFile string, loc string) [][]string {
 }
 
 func addField(a []string, index int, field string) []string {
-	if index == 0 {
+	if index == 0 || index == 6 || index == 7 {
 		a = append(a, field)
 	}
-	if index == 6 {
-		a = append(a, field[:6])
-	}
-	if  index == 7 {
-		a = append(a, shortPizzaName(field))
-	}
 	return a
-}
-
-func shortPizzaName(s string) string {
-	if s == "Vegetarische Pizza" {
-		return "vegi"
-	}
-	if s == "Pizza mit Fleisch" {
-		return "fleisch"
-	}
-	return "no"
 }
 
 func isValid(row []string, loc string) bool {

@@ -25,3 +25,13 @@ func CreateMap(arr []string) map[string]int {
 	}
 	return m
 }
+
+func Count(mat [][]string, slot string, pizzatype string) int {
+	counter := 0
+	for _, v := range mat {
+		if slot == v[1] && pizzatype == v[2] {
+			counter++
+		}
+	}
+	return counter
+}

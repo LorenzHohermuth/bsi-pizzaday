@@ -4,7 +4,7 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 */
 package main
 
-import "github.com/lorenz/pizzaday/cmd"
+import "github.com/lorenzhohermuth/bsi-pizzaday/cmd"
 
 func main() {
 	cmd.Execute()
