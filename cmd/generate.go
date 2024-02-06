@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/lorenzhohermuth/bsi-pizzaday/internal/display"
 	"github.com/lorenzhohermuth/bsi-pizzaday/internal/dotfile"
 	"github.com/lorenzhohermuth/bsi-pizzaday/internal/spread"
 	"github.com/lorenzhohermuth/bsi-pizzaday/pkg/csv"
@@ -16,11 +17,16 @@ import (
 type PizzaSlot struct {
 	Slot string
 	Type string
-	Pizzas map[string]int
+}
+
+type SlotSpreadMapping struct {
+	Slot PizzaSlot
+	PizzaMap map[string]int
 }
 
 var availableSlots []string
 var availablePizzaTypes []string
+var opt dotfile.Options
 
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
@@ -34,16 +40,25 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fileFlag, _ := cmd.Flags().GetString("file")
-		opt := dotfile.ParseFile(os.Getenv("DOT_DIR") + "\\.pizzaconfig")
+		opt = dotfile.ParseFile(os.Getenv("DOT_DIR") + "\\.pizzaconfig")
 		availableSlots = opt.Slots
 		availablePizzaTypes = opt.PizzaTypes
+
 		if fileFlag != "" {
+
+			spm := []SlotSpreadMapping{}
 			ps := generatePizzaSlots()
 			mat := csv.Decode(fileFlag, opt.Location)			
-			//vegiMap := spread.CreateMap(opt.VegiPizzas)
-			meatMap := spread.CreateMap(opt.MeatPizzas)
-			spread.SpreadPizzas(meatMap, 703)
-			fmt.Println(mat)
+
+			for _, v := range ps {
+				amount, m := count(mat, v)	
+				spm = append(spm, 
+					SlotSpreadMapping{
+						Slot: v,
+						PizzaMap: spread.SpreadPizzas(m, amount),
+					})
+			}
+			printOrder(spm)
 		}
 	},
 }
@@ -60,6 +75,32 @@ func generatePizzaSlots() []PizzaSlot {
 		}
 	}
 	return arr
+}
+
+func count(mat [][]string, pizzaSlot PizzaSlot) (int, map[string]int) {
+	m := map[string]int{}
+	counter := 0
+	for _,v := range mat {
+		if v[1] == pizzaSlot.Slot && v[2] == pizzaSlot.Type {
+			counter++
+		}
+	}
+	if pizzaSlot.Type == availablePizzaTypes[0] {
+		m = spread.CreateMap(opt.MeatPizzas)
+	}else{
+		m = spread.CreateMap(opt.VegiPizzas)
+	}
+	return counter, m
+}
+
+func printOrder(spm []SlotSpreadMapping) {
+	s1 := opt.PickUp1 + "\n"
+	s1 += display.ListPizzas(spm[0].PizzaMap)
+	s1 += display.ListPizzas(spm[1].PizzaMap)
+	s2 := "\n" + opt.PickUp2 + "\n"
+	s2 += display.ListPizzas(spm[2].PizzaMap)
+	s2 += display.ListPizzas(spm[3].PizzaMap)
+	fmt.Println(s1 + s2)
 }
 
 func init() {

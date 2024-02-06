@@ -1,6 +1,5 @@
 package spread
 
-import "fmt"
 
 func SpreadPizzas(m map[string]int, amount int) map[string]int {
 	var avr int = amount / len(m)
@@ -14,7 +13,6 @@ func SpreadPizzas(m map[string]int, amount int) map[string]int {
 		}
 		i++
 	}
-	fmt.Println(m)
 	return m
 }
 

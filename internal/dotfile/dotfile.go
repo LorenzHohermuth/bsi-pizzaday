@@ -13,6 +13,8 @@ type Options struct {
 	PizzaTypes	[]string
 	Slots				[]string
 	Location		string
+	PickUp1			string
+	PickUp2			string
 }
 
 func ParseFile(dotfilePath string) Options {
@@ -61,8 +63,7 @@ func readValue(key string, value string){
 		}
 		opt.Slots = arr
 
-	opt.MeatPizzas = arr
-		case "available.pizzaTypes":
+	case "available.pizzaTypes":
 		value = strings.Trim(value, "[]")
 		arr := strings.Split(value, ",")
 		for i := range arr {
@@ -72,6 +73,12 @@ func readValue(key string, value string){
 
 	case "bsi.location":
 		opt.Location = value
+	
+	case "slot1.timeToPickUp":
+		opt.PickUp1 = value
+
+	case "slot2.timeToPickUp":
+		opt.PickUp2 = value
 	}
 }
 
