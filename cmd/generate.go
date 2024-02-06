@@ -7,9 +7,17 @@ import (
 	"fmt"
 
 	"github.com/lorenz/pizzaday/internal/dotfile"
+	"github.com/lorenz/pizzaday/internal/spread"
 	"github.com/lorenz/pizzaday/pkg/csv"
 	"github.com/spf13/cobra"
 )
+
+const dotPizzaConfPath string = "C:/Users/lho/Documents/GitHub/bsi-pizzaday/.pizzaconfig"
+
+type PizzaType struct {
+	Slot string
+	Type string
+}
 
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
@@ -23,9 +31,12 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fileFlag, _ := cmd.Flags().GetString("file")
-		opt := dotfile.ParseFile("C:/Users/lho/Documents/GitHub/bsi-pizzaday/.pizzaconfig")
+		opt := dotfile.ParseFile(dotPizzaConfPath)
 		if fileFlag != "" {
 			mat := csv.Decode(fileFlag, opt.Location)			
+			//vegiMap := spread.CreateMap(opt.VegiPizzas)
+			meatMap := spread.CreateMap(opt.MeatPizzas)
+			spread.SpreadPizzas(meatMap, 703)
 			fmt.Println(mat)
 		}
 	},

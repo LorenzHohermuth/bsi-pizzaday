@@ -1,11 +1,24 @@
 package spread
 
+import "fmt"
 
 func SpreadPizzas(m map[string]int, amount int) map[string]int {
+	var avr int = amount / len(m)
+	delta := amount - (avr * len(m))
+
+	i := 0
+	for k := range m {
+		m[k] = avr
+		if i < delta {
+			m[k]++
+		}
+		i++
+	}
+	fmt.Println(m)
 	return m
 }
 
-func createMap(arr []string) map[string]int {
+func CreateMap(arr []string) map[string]int {
 	m := make(map[string]int)
 	for _, v := range arr {
 		m[v] = 0
