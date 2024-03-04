@@ -24,5 +24,5 @@ slot2.timeToPickUp = Slot 2: 12:00
 - Download Excel file from Story
 - Open it
 - File > Save As > Change file type to CSV  + Enter name > Save
-- `$ go bsi-pizzaday generate --file .\path\to\csv\file`
+- `$ bsi-pizzaday generate --file .\path\to\csv\file`
 - there you go
